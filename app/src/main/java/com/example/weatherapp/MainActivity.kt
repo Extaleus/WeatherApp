@@ -1,5 +1,6 @@
 package com.example.weatherapp
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,11 +20,12 @@ import com.example.weatherapp.ui.theme.WeatherAppTheme
 
 class MainActivity : ComponentActivity() {
     private val mainViewModel = MainViewModel()
+    private lateinit var prefs: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             WeatherAppTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -33,6 +35,13 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+
+        prefs = getSharedPreferences("Settings", MODE_PRIVATE)
+        mainViewModel.setSharedPreferences(prefs)
+    }
 }
 
 @Composable
@@ -40,14 +49,15 @@ fun MainView(
     mainViewModel: MainViewModel,
 ) {
     val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
+    val favoriteState by mainViewModel.favoriteState.collectAsStateWithLifecycle()
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(16.dp)
     ) {
         SearchBar(mainViewModel)
-        WeatherComp(uiState)
-        AutoComplete()
+        WeatherComp(uiState, favoriteState, mainViewModel)
     }
 }
 
