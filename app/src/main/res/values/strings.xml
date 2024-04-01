@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">WeatherApp</string>
     <string name="placeholder_search">Search</string>
+    <string name="bebe">bebe</string>
 </resources>
