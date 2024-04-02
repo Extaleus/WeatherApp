@@ -1,6 +1,5 @@
 package com.example.weatherapp
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun WeatherComp(uiState: WeatherInfo, favoriteState: FavoriteInfo, mainViewModel: MainViewModel) {
+fun WeatherComp(searchUiState: WeatherInfo, searchViewModel: SearchViewModel) {
     Column(
         modifier = Modifier
             .padding(top = 16.dp),
@@ -30,21 +29,19 @@ fun WeatherComp(uiState: WeatherInfo, favoriteState: FavoriteInfo, mainViewModel
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = favoriteState.city,
+                text = searchUiState.cityName,
                 modifier = Modifier,
                 fontSize = 30.sp
             )
-            IconToggleButton(checked = favoriteState.favorite, onCheckedChange = {
+            IconToggleButton(checked = searchUiState.favorite, onCheckedChange = {
                 if (it) {
-                    mainViewModel.addNewFavoriteCity(favoriteState.city)
-                    Log.d("my", "add to favorites")
+                    searchViewModel.addNewFavoriteCity(searchUiState.cityName)
                 } else {
-                    mainViewModel.removeFavoriteCity(favoriteState.city)
-                    Log.d("my", "remove from favorites")
+                    searchViewModel.removeFavoriteCity(searchUiState.cityName)
                 }
             }) {
                 Icon(
-                    imageVector = if (favoriteState.favorite) {
+                    imageVector = if (searchUiState.favorite) {
                         Icons.Default.Favorite
                     } else {
                         Icons.Default.FavoriteBorder
@@ -68,12 +65,12 @@ fun WeatherComp(uiState: WeatherInfo, favoriteState: FavoriteInfo, mainViewModel
                     fontSize = 18.sp
                 )
                 Text(
-                    text = uiState.temperature,
+                    text = searchUiState.temperature,
                     modifier = Modifier,
                     fontSize = 16.sp
                 )
                 Text(
-                    text = uiState.temperatureFeelsLike,
+                    text = searchUiState.temperatureFeelsLike,
                     modifier = Modifier,
                     fontSize = 12.sp
                 )
@@ -82,7 +79,7 @@ fun WeatherComp(uiState: WeatherInfo, favoriteState: FavoriteInfo, mainViewModel
                 modifier = Modifier
                     .weight(1f)
                     .padding(top = 16.dp, end = 16.dp, bottom = 16.dp),
-                painter = painterResource(uiState.weatherIconInt),
+                painter = painterResource(searchUiState.weatherIconInt),
                 contentDescription = ""
             )
         }
@@ -102,12 +99,12 @@ fun WeatherComp(uiState: WeatherInfo, favoriteState: FavoriteInfo, mainViewModel
                     fontSize = 18.sp
                 )
                 Text(
-                    text = uiState.weatherMain,
+                    text = searchUiState.weatherMain,
                     modifier = Modifier,
                     fontSize = 16.sp
                 )
                 Text(
-                    text = uiState.weatherDesc,
+                    text = searchUiState.weatherDesc,
                     modifier = Modifier,
                     fontSize = 12.sp
                 )
@@ -124,12 +121,12 @@ fun WeatherComp(uiState: WeatherInfo, favoriteState: FavoriteInfo, mainViewModel
                     fontSize = 18.sp
                 )
                 Text(
-                    text = uiState.windSpeed,
+                    text = searchUiState.windSpeed,
                     modifier = Modifier,
                     fontSize = 16.sp
                 )
                 Text(
-                    text = uiState.windDeg,
+                    text = searchUiState.windDeg,
                     modifier = Modifier,
                     fontSize = 12.sp
                 )
@@ -141,5 +138,5 @@ fun WeatherComp(uiState: WeatherInfo, favoriteState: FavoriteInfo, mainViewModel
 @Preview(showBackground = true)
 @Composable
 fun Show() {
-    WeatherComp(uiState = WeatherInfo(), favoriteState = FavoriteInfo(), mainViewModel = MainViewModel())
+    WeatherComp(searchUiState = WeatherInfo(), searchViewModel = SearchViewModel())
 }

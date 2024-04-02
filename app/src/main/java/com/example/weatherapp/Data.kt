@@ -1,5 +1,8 @@
 package com.example.weatherapp
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
+
 data class WeatherData(
     val name: String,
     val main: Main,
@@ -23,12 +26,9 @@ data class Wind(
     val deg: Int
 )
 
-data class FavoriteInfo(
-    val city: String = "None",
-    val favorite: Boolean = false
-)
-
 data class WeatherInfo(
+    val cityName: String = "None",
+
     val temperature: String = "None°C",
     val temperatureFeelsLike: String = "None°C",
 
@@ -39,6 +39,12 @@ data class WeatherInfo(
 
     val windSpeed: String = "None",
     val windDeg: String = "None",
+
+    val favorite: Boolean = false
+)
+
+data class Cities(
+    val snapshotStateList: SnapshotStateList<WeatherInfo> = mutableStateListOf()
 )
 
 val rusCities = listOf(

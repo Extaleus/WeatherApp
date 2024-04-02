@@ -1,6 +1,5 @@
 package com.example.weatherapp
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -41,7 +40,7 @@ import androidx.compose.ui.unit.toSize
 
 @Composable
 fun SearchBar(
-    mainViewModel: MainViewModel
+    searchViewModel: SearchViewModel
 ) {
     var currentFieldText by remember { mutableStateOf("") }
 
@@ -91,7 +90,10 @@ fun SearchBar(
                 ),
                 singleLine = true,
                 trailingIcon = {
-                    IconButton(onClick = { expanded = !expanded }) {
+                    IconButton(onClick = {
+                        expanded = !expanded
+                        currentFieldText = ""
+                    }) {
                         Icon(
                             modifier = Modifier.size(24.dp),
                             imageVector = if (expanded) {
@@ -117,7 +119,7 @@ fun SearchBar(
                                     .contains(currentFieldText.lowercase()) || it.lowercase()
                                     .contains("others")
                             }.sorted()) {
-                                ItemsCategory(mainViewModel, title = it) { title ->
+                                ItemsCategory(searchViewModel, title = it) { title ->
                                     currentFieldText = title
                                     expanded = false
                                 }
@@ -126,7 +128,7 @@ fun SearchBar(
                             items(
                                 rusCities.sorted()
                             ) {
-                                ItemsCategory(mainViewModel, title = it) { title ->
+                                ItemsCategory(searchViewModel, title = it) { title ->
                                     currentFieldText = title
                                     expanded = false
                                 }
@@ -141,15 +143,14 @@ fun SearchBar(
 
 @Composable
 fun ItemsCategory(
-    mainViewModel: MainViewModel,
+    searchViewModel: SearchViewModel,
     title: String, onSelect: (String) -> Unit
 ) {
     Row(modifier = Modifier
         .fillMaxWidth()
         .clickable {
             onSelect(title)
-            Log.d("my", "Selected city: $title")
-            mainViewModel.getWeatherData(title)
+            searchViewModel.getWeatherData(title, true)
         }
         .padding(start = 10.dp, top = 10.dp, bottom = 10.dp)) {
         Text(text = title, fontSize = 16.sp)
