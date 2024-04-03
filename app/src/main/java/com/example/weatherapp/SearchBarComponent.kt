@@ -113,8 +113,9 @@ fun SearchBar(
                     LazyColumn(
                         modifier = Modifier.heightIn(max = 180.dp),
                     ) {
+
                         if (currentFieldText.isNotEmpty()) {
-                            items(rusCities.filter {
+                            items(searchViewModel.rt.filter {
                                 it.lowercase()
                                     .contains(currentFieldText.lowercase()) || it.lowercase()
                                     .contains("others")
@@ -126,7 +127,7 @@ fun SearchBar(
                             }
                         } else {
                             items(
-                                rusCities.sorted()
+                                searchViewModel.rt.sorted()
                             ) {
                                 ItemsCategory(searchViewModel, title = it) { title ->
                                     currentFieldText = title

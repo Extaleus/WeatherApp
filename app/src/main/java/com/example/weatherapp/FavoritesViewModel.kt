@@ -15,19 +15,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.random.Random
 
 class FavoritesViewModel : ViewModel() {
-    private val apiKey = "38aa59a66b09c58584737f4bc815aeed"
+
     private lateinit var weatherService: WeatherService
 
     private val _favoritesUiState = MutableStateFlow(Cities())
     val favoritesUiState: StateFlow<Cities> = _favoritesUiState.asStateFlow()
-
-    private var cities: MutableSet<String> = prefs.all.keys.toMutableSet()
-
-//    init {
-//        cities.forEach {
-//            getWeatherData(it, true)
-//        }
-//    }
 
     fun reInit() {
         _favoritesUiState.update {
@@ -35,8 +27,7 @@ class FavoritesViewModel : ViewModel() {
                 snapshotStateList.clear()
             }
         }
-        cities = prefs.all.keys
-        cities.forEach {
+        prefs.all.keys.forEach {
             getWeatherData(it, true)
         }
     }
@@ -71,7 +62,7 @@ class FavoritesViewModel : ViewModel() {
                     Retrofit.Builder().baseUrl("https://api.openweathermap.org/data/2.5/")
                         .addConverterFactory(GsonConverterFactory.create()).build()
                         .create(WeatherService::class.java)
-                val weatherData = weatherService.getWeather(city, apiKey, "metric")
+                val weatherData = weatherService.getWeather(city, API_KEY, "metric")
                 withContext(Dispatchers.Main) {
                     val temperature = weatherData.main.temp.toInt().toString()
                     _favoritesUiState.update {

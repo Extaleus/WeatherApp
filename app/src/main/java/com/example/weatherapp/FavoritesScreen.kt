@@ -20,13 +20,18 @@ fun FavoritesScreen(favoritesViewModel: FavoritesViewModel, favoritesUiState: Ci
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(items = favoritesUiState.snapshotStateList, itemContent = { item ->
-            FavoriteItem(item, favoritesViewModel)
+            FavoriteItem(item){
+                favoritesViewModel.removeFavoriteCity(item)
+            }
         })
     }
 }
 
 @Composable
-fun FavoriteItem(item: WeatherInfo, favoritesViewModel: FavoritesViewModel) {
+fun FavoriteItem(
+    item: WeatherInfo,
+    favoriteClick: () -> Unit
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -40,9 +45,7 @@ fun FavoriteItem(item: WeatherInfo, favoritesViewModel: FavoritesViewModel) {
             modifier = Modifier,
             fontSize = 30.sp,
         )
-        IconButton(onClick = {
-            favoritesViewModel.removeFavoriteCity(item)
-        }) {
+        IconButton(onClick = favoriteClick) {
             Icon(
                 imageVector = Icons.Default.Favorite, contentDescription = null
             )
